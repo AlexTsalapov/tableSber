@@ -51,27 +51,6 @@ exports.open = (req, res) => {
         });
 
 };
-
-exports.create = (req, res) => {
-    Element.create()
-        .then(data => {
-            const formattedElements = data.map((item) => {
-                return {
-                    id: item.id,
-                    info: item.info
-                };
-            });
-            openElements = formattedElements;
-            res.render("table2.hbs", {
-                users: formattedElements
-            });
-        })
-        .catch(err => {
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving elements."
-            });
-        });
 }
 
 
