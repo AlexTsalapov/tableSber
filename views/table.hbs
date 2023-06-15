@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Table</title>
+</head>
+<body>
+<table border="1px" id="myTable">
+    <tr>
+        <th>id</th>
+        <th>Info</th>
+        <th>Delete</th>
+    </tr>
+    {{#each users}}
+        <tr id="columns">
+            <td width="200" id ="idEdit-{{this.id}}" contenteditable=true>{{this.id}}</td>
+            <td width="200" id="infoEdit-{{this.id}}" contenteditable=true>{{this.info}}</td>
+            <td width="10" onclick="deleteInfo({{this.id}})">X</td>
+            <td width="10" onclick="updateInfo({{this.id}})">☑</td>
+
+        </tr>
+    {{/each}}
+    <td width="200" id="id" contenteditable="true">Введите id</td>
+    <td width="200" id="info" contenteditable="true">Введите info</td>
+    <td width="10" onclick="createInfo(document.getElementById('id').textContent,document.getElementById('info').textContent)">+</td>
+
+</table>
+<script>
+    function updateInfo(id) {
+        const data = {
+            id: document.getElementById("idEdit-"+id).textContent,
+            info: document.getElementById("infoEdit-"+id).textContent
+        };
+        console.log(data)
+        console.log(id,info)
+        fetch('/items/update', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+
+                .catch(error => {
+                    // Обработка ошибок
+                });
+       // document.location.href = '/items'
+    }
+    function deleteInfo(id) {
+        const data = {
+            id: id,
+        };
+        fetch('/items/delete', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+
+                .catch(error => {
+                    // Обработка ошибок
+                });
+        document.location.href = '/items'
+    }
+    function createInfo(id,info) {
+        console.log(id,info)
+        const data = {
+            id: id,
+            info: info
+        };
+        fetch('/items/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+
+                .catch(error => {
+                    // Обработка ошибок
+                });
+       document.location.href = '/items'
+    }
+</script>
+</body>
+</html>
